@@ -1,9 +1,9 @@
 name: Sync Files from Mirrored to TutuBetterRules
 
 on:
-  schedule:
-    - cron: "0 4,16 * * *"  # Runs at 4:00 AM and 4:00 PM every day
-  workflow_dispatch:  # Allows manual triggering of the workflow
+  repository_dispatch:
+    types: [sync_files] 
+  workflow_dispatch: 
 
 jobs:
   sync_files:
