@@ -2,8 +2,8 @@ name: Sync Files
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  # 每 30 分钟触发一次
-  workflow_dispatch:  # 允许手动触发工作流
+    - cron: "*/30 * * * *"
+  workflow_dispatch: 
 
 jobs:
   sync_files:
@@ -41,9 +41,9 @@ jobs:
         run: |
           git add RuleList/DOMAlN/AD.Reject.list Surge/module/All-in-One-2.x.sgmodule
           if git diff --cached --quiet; then
-            echo "No changes to commit"  # 没有更改则输出提示，并退出
+            echo "No changes to commit"
           else
-            git commit -m "Sync updated reject.list and All-in-One-2.x.sgmodule files from Mirrored repository"
+            git commit -m "⟳💡Sync updated from upstream"
             git push origin tutu
           fi
         env:
