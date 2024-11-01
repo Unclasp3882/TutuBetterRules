@@ -1,5 +1,5 @@
 #!name=AD ByeBye+ 2.x
-#!desc=(2.x) Most Optimized Ad-free Experience presented with automated updates. | Repo: https://tuu.cat/repo・Update: 10/31/2024・Support: @bunizao
+#!desc=(2.x) Most Optimized Ad-free Experience presented with automated updates. | Repo: https://tuu.cat/repo・Update: 11/01/2024・Support: @bunizao
 #!url=https://tuu.cat/ADBlock
 #!category=🚫 AD Block
 #!author=@hututu0 & Everyone in the community
@@ -26,6 +26,13 @@ RULE-SET,https://raw.githubusercontent.com/bunizao/TutuBetterRules/tutu/RuleList
 ^https:\/\/www\.zhihu\.com\/api\/v4/(?:answers|questions)\/\d+/related-readings - reject
 ^https:\/\/www\.zhihu\.com\/commercial_api\/banners_v3\/mobile_banner - reject
 ^https:\/\/zhuanlan\.zhihu\.com\/api\/articles\/\d+\/recommendation - reject
+
+# ------------------------------------- Bilibili --------------------------------------
+
+# 移除视频链接跟踪参数
+(^https:\/\/(?:www|m)\.bilibili\.com\/video\/(?:BV\w{10}|av\d{9}))(\/?\?.*) $1 302
+# 移除直播间链接跟踪参数
+(^https:\/\/live\.bilibili\.com\/\d+)(\/?\?.*) $1 302
 
 # ------------------------------------- Eleme --------------------------------------
 
@@ -212,6 +219,34 @@ RULE-SET,https://raw.githubusercontent.com/bunizao/TutuBetterRules/tutu/RuleList
 # ------------------------------------- JD --------------------------------------
 
 ^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(searchBoxWord|stationPullService|uniformRecommend[06]) data-type=text data="{}" status-code=200
+
+# ------------------------------------- Bilibili --------------------------------------
+
+# 开屏广告
+^https:\/\/(?:api\.bilibili\.com\/x\/mengqi\/v1\/resource|app\.bilibili\.com\/x\/resource\/peak\/download) data-type=text data="{}" status-code=200
+
+# 满意度调研
+^https:\/\/api\.bilibili\.com\/x\/v2\/dm\/qoe\/show\? data-type=text data="{}" status-code=200
+
+# 大会员广告
+^https:\/\/api\.bilibili\.com\/x\/vip\/ads\/materials\? data-type=text data="{}" status-code=200
+
+# 直播广告
+^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? data-type=text data="{}" status-code=200
+
+# 屏蔽默认搜索框关键词
+^https:\/\/(?:app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.app\.interface\.v1\.Search\/DefaultWords data-type=text data="{}" status-code=200
+
+# 流量卡推荐
+^https:\/\/(?:app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.app\.view\.v1\.View\/TFInfo data-type=text data="{}" status-code=200
+
+# IP请求、地理位置请求 //api.bilibili.com
+^https:\/\/app\.bilibili\.com\/x\/resource\/ip data-type=text data="{}" status-code=200
+
+^https:\/\/api\.bilibili\.com\/x\/web-interface\/zone\?jsonp data-type=text data="{}" status-code=200
+
+# 移除右上角活动入口
+^https:\/\/app\.bilibili\.com\/x\/resource\/top\/activity\? data-type=text data="{ "code": -404, "message": "啥都木有", "ttl": 1, "data": null }" status-code=200 header="Content-Type:text/json"
 
 # ------------------------------------- MiniProgram ---------------------------------------
 
@@ -459,6 +494,52 @@ body_rewrite_35 = type=http-response, pattern=^https:\/\/api\.pinduoduo\.com\/se
 
 移除京东广告 = type=http-response, pattern=^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(deliverLayer|getTabHomeInfo|myOrderInfo|orderTrackBusiness|personinfoBusiness|start|welcomeHome), script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/JD_remove_ads.js, requires-body=true
 
+# ------------------------------------- Bilibili --------------------------------------
+
+body_rewrite_27 = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\?, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/body-rewrite.js, requires-body=true, max-size=-1, timeout=30, argument=%5B%5B%22json-del%22%2C%5B%22data.common_equip%22%5D%5D%5D
+
+# 移除播放页面视频列表广告
+移除播放页面视频列表广告 = type=http-response, pattern=^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.(view|viewunite)\.v1\.View\/(View|ViewProgress)$, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_helper_beta.js, requires-body=true, binary-body-mode=true
+
+# 移除搜索结果广告 - 待完善
+移除搜索结果广告 = type=http-response, pattern=^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.polymer\.app\.search\.v1\.Search\/SearchAll$, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_helper_beta.js, requires-body=true, binary-body-mode=true
+
+# 移除评论区广告
+移除评论区广告 = type=http-response, pattern=^https:\/\/grpc\.biliapi\.net\/bilibili\.main\.community\.reply\.v1\.Reply\/MainList, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_helper_beta.js, requires-body=true, binary-body-mode=true
+
+# 移除动态页面广告 - 待完善
+移除动态页面广告 = type=http-response, pattern=^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.app\.dynamic\.v2\.Dynamic\/DynAll$, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_helper_beta.js, requires-body=true, binary-body-mode=true
+
+# 会员特效弹幕处理
+移除交互式弹幕 = type=http-response, pattern=^https:\/\/grpc\.biliapi\.net\/bilibili\.community\.service\.dm\.v1\.DM\/DmSegMobile, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_helper_beta.js, requires-body=true, binary-body-mode=true
+
+# 移除交互式弹幕
+移除交互式弹幕 = type=http-response, pattern=^https:\/\/grpc\.biliapi\.net\/bilibili\.community\.service\.dm\.v1\.DM\/DmView, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_helper_beta.js, requires-body=true, binary-body-mode=true
+
+# 移除青少年模式弹窗
+移除青少年弹窗 = type=http-response, pattern=^https:\/\/grpc\.biliapi\.net\/bilibili\.app\.interface\.v1\.Teenagers\/ModeStatus, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_helper_beta.js, requires-body=true, binary-body-mode=true
+
+# 移除开屏广告
+移除开屏广告 = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/(?:brand\/list|event\/list2|list|show), script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_remove_ads.js, requires-body=true
+
+# 移除首页推荐广告
+移除首页推荐广告 = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_remove_ads.js, requires-body=true
+
+# 精简首页顶部标签
+精简首页顶部标签 = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\?, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_remove_ads.js, requires-body=true
+
+# 移除热搜广告
+移除热搜广告 = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/search\/square\?, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_remove_ads.js, requires-body=true
+
+# 移除观影页广告
+移除观影页广告 = type=http-response, pattern=^https:\/\/api\.bilibili\.com\/pgc\/page\/(?:bangumi|cinema\/tab), script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_remove_ads.js, requires-body=true
+
+# 移除直播间广告
+移除直播间广告 = type=http-response, pattern=^https:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom\?, script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_remove_ads.js, requires-body=true
+
+# 精简我的页面
+精简我的页面 = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/account\/(?:mine|myinfo), script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/Bilibili_remove_ads.js, requires-body=true
+
 # ------------------------------------- Pixiv ---------------------------------------
 
 pixivAd = type=http-response,pattern=^https?:\/\/oauth\.secure\.pixiv\.net\/(auth\/token),requires-body=1,max-size=3145728,script-path=https://github.com/bunizao/Mirrored/raw/main/Chores/js/pixivAds.js,script-update-interval=0
@@ -466,6 +547,6 @@ pixivAd = type=http-response,pattern=^https?:\/\/oauth\.secure\.pixiv\.net\/(aut
 ########################################################################################
 
 [MITM]
-hostname = %APPEND% oauth.secure.pixiv.net, api.mcd.cn, orders.kfc.com.cn, dynamicad.kfc.com.cn, res.kfc.com.cn, res.pizzahut.com.cn, 3pp.starbucks.com.cn, htwkop.xiaojukeji.com, tm-api.pin-dao.cn, webchatapp.fcbox.com, dsp.fcbox.com, go.heytea.com, api.hellobike.com, ucmp.sf-express.com, vod-movie.maoyan.com, api.maoyan.com, ad.maoyan.com, wx.maoyan.com, elemecdn.com, fuss10.elemecdn.com, www1.elecfans.com, flowplus.meituan.net, img.meituan.net, s3plus.meituan.net, *.zhihu.com, m5.amap.com, m5-zb.amap.com, oss.amap.com, sns.amap.com, edith.xiaohongshu.com, www.xiaohongshu.com, *.weibo.cn, *.weibo.com, weibo.com, tiebac.baidu.com, tieba.baidu.com, cn-acs.m.cainiao.com, guide-acs.m.taobao.com, api.pinduoduo.com, api.yangkeduo.com, api.m.jd.com
+hostname = %APPEND% oauth.secure.pixiv.net, api.mcd.cn, orders.kfc.com.cn, dynamicad.kfc.com.cn, res.kfc.com.cn, res.pizzahut.com.cn, 3pp.starbucks.com.cn, htwkop.xiaojukeji.com, tm-api.pin-dao.cn, webchatapp.fcbox.com, dsp.fcbox.com, go.heytea.com, api.hellobike.com, ucmp.sf-express.com, vod-movie.maoyan.com, api.maoyan.com, ad.maoyan.com, wx.maoyan.com, elemecdn.com, fuss10.elemecdn.com, www1.elecfans.com, flowplus.meituan.net, img.meituan.net, s3plus.meituan.net, *.zhihu.com, m5.amap.com, m5-zb.amap.com, oss.amap.com, sns.amap.com, edith.xiaohongshu.com, www.xiaohongshu.com, *.weibo.cn, *.weibo.com, weibo.com, tiebac.baidu.com, tieba.baidu.com, cn-acs.m.cainiao.com, guide-acs.m.taobao.com, api.pinduoduo.com, api.yangkeduo.com, api.m.jd.com, app.bilibili.com, api.bilibili.com, api.live.bilibili.com, grpc.biliapi.net, www.bilibili.com, m.bilibili.com, live.bilibili.com
 h2 = true
 tcp-connection = true
