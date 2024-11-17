@@ -139,7 +139,7 @@ RULE-SET,https://raw.githubusercontent.com/bunizao/TutuBetterRules/tutu/RuleList
 ^https:\/\/(?:app\.bilibili\.com|grpc\.biliapi\.net)\/bilibili\.app\.view\.v1\.View\/TFInfo$ data-type=text data="{}" status-code=200
 ^https:\/\/app\.bilibili\.com\/x\/resource\/ip data-type=text data="{}" status-code=200
 ^https:\/\/api\.bilibili\.com\/x\/web-interface\/zone\?jsonp data-type=text data="{}" status-code=200
-^https:\/\/app\.bilibili\.com\/x\/resource\/top\/activity\? data-type=text data="{ "code": -404, "message": "啥都木有", "ttl": 1, "data": null }" status-code=200 header="Content-Type:text/json"
+^https:\/\/app\.bilibili\.com\/x\/resource\/top\/activity\? data-type=text data="{ "code": -404,"message": "啥都木有","ttl": 1,"data": null }" status-code=200 header="Content-Type:text/json"
 
 # ----------- MiniProgram -----------
 
