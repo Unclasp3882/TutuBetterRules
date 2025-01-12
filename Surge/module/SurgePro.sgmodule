@@ -121,6 +121,10 @@
 # AICoin
 ^http:\/\/(www.)?aicoin\.cn\/$ https://www.aicoin.com/ 302
 
+# > Revenuecat Universal
+^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com)\/.+\/(receipts$|subscribers\/[^/]+$) https://rc-backup.lovebabyforever.workers.dev header
+^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com)\/.+\/(receipts$|subscribers\/[^/]+$) https://reven.lovebabyforever.workers.dev header
+
 ###################################### Script ######################################
 
 [Script]
@@ -144,10 +148,6 @@ Xmind = type=http-response,pattern=https?:\/\/www\.xmind\.(cn|net)\/\_res\/devic
 
 # > DailyArt
 DailyArt = type=http-response, pattern=^https?:\/\/api\.getdailyart\.com\/api\/(subscription\/verified|auth\/login|check-logged), requires-body=true, max-size=3145728, script-path=https://raw.githubusercontent.com/chxm1023/Rewrite/main/DailyArt.js, timeout=60, script-update-interval=0
-
-# > Revenuecat Universal
-^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com)\/.+\/(receipts$|subscribers\/[^/]+$) https://rc-backup.lovebabyforever.workers.dev header
-^https:\/\/(api\.revenuecat\.com|api\.rc-backup\.com)\/.+\/(receipts$|subscribers\/[^/]+$) https://reven.lovebabyforever.workers.dev header
 
 # > Quark Scanner
 Quark Scanner = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/acs\.m\.taobao\.com\/gw\/mtop\.sm\.order\.service\.member\.getmemberinfo,script-path=https://raw.githubusercontent.com/Guding88/Script/main/kuakesaomiaowang.js
